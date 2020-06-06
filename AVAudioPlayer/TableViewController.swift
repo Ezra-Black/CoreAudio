@@ -11,12 +11,12 @@ protocol RecordingDelegate {
 }
 
 import UIKit
-let songURL = Bundle.main.url(forResource: "piano", withExtension: "mp3")!
+
 
 
 class TableViewController: UITableViewController {
     
-    var audioToList: [URL] = [songURL]
+    var audioToList: [URL] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
