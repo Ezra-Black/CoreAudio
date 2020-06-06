@@ -39,7 +39,7 @@ class AudioRecorderController: UIViewController {
         
         // Use a font that won't jump around as values change
         timeElapsedLabel.font = UIFont.monospacedDigitSystemFont(ofSize: timeElapsedLabel.font.pointSize,
-                                                          weight: .regular)
+                                                                 weight: .regular)
         timeRemainingLabel.font = UIFont.monospacedDigitSystemFont(ofSize: timeRemainingLabel.font.pointSize,
                                                                    weight: .regular)
         
@@ -53,23 +53,21 @@ class AudioRecorderController: UIViewController {
     }
     
     private func updateViews() {
-        if self.recordingURL != nil {
+        if delegate == nil {
+            navigationController?.isToolbarHidden = true
             recordButton.isHidden = true
-            navigationItem.rightBarButtonItem = nil
-            playButton.isSelected = isPlaying
-        } else {
-            playButton.isSelected = isPlaying
         }
+        playButton.isSelected = isPlaying
         let currentTime = audioPlayer?.currentTime ?? 0.0
-                   let duration = audioPlayer?.duration ?? 0
-                   let timeRemaining = round(duration) - currentTime
-                   timeElapsedLabel.text = timeIntervalFormatter.string(from: currentTime) ?? "00:00"
-                   timeRemainingLabel.text = "-" + (timeIntervalFormatter.string(from: timeRemaining) ?? "00:00")
-                   
-                   timeSlider.minimumValue = 0
-                   timeSlider.maximumValue = Float(duration)
-                   timeSlider.value = Float(currentTime)
-                   recordButton.isSelected = isRecording
+        let duration = audioPlayer?.duration ?? 0
+        let timeRemaining = round(duration) - currentTime
+        timeElapsedLabel.text = timeIntervalFormatter.string(from: currentTime) ?? "00:00"
+        timeRemainingLabel.text = "-" + (timeIntervalFormatter.string(from: timeRemaining) ?? "00:00")
+        
+        timeSlider.minimumValue = 0
+        timeSlider.maximumValue = Float(duration)
+        timeSlider.value = Float(currentTime)
+        recordButton.isSelected = isRecording
     }
     
     
@@ -87,15 +85,14 @@ class AudioRecorderController: UIViewController {
             
             if let audioRecorder = self.audioRecorder,
                 self.isRecording == true {
-
+                
                 audioRecorder.updateMeters()
                 self.audioVisualizer.addValue(decibelValue: audioRecorder.averagePower(forChannel: 0))
-
+                
             }
-
+            
             if let audioPlayer = self.audioPlayer,
                 self.isPlaying == true {
-
                 audioPlayer.updateMeters()
                 self.audioVisualizer.addValue(decibelValue: audioPlayer.averagePower(forChannel: 0))
             }
@@ -109,7 +106,7 @@ class AudioRecorderController: UIViewController {
     
     
     @IBAction func saveTapped(_ sender: Any) {
-      stopRecording()
+        stopRecording()
     }
     
     // MARK: - Playback
@@ -161,13 +158,13 @@ class AudioRecorderController: UIViewController {
     
     var audioRecorder: AVAudioRecorder?
     var recordingURL: URL? //{
-//        didSet {
-//            if let recordingURL = recordingURL {
-//                audioToList.append(recordingURL)
-//                print("⚠️ Contents of audioToList On TableView is now: \(audioToList.debugDescription)")
-//            }
-//        }
-//    }
+    //        didSet {
+    //            if let recordingURL = recordingURL {
+    //                audioToList.append(recordingURL)
+    //                print("⚠️ Contents of audioToList On TableView is now: \(audioToList.debugDescription)")
+    //            }
+    //        }
+    //    }
     
     var isRecording: Bool {
         audioRecorder?.isRecording ?? false
@@ -216,12 +213,12 @@ class AudioRecorderController: UIViewController {
     }
     
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if let navC = segue.destination as? UINavigationController,
-//            let TV = navC.viewControllers.first as? TableViewController {
-//
-//        }
-//    }
+    //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    //        if let navC = segue.destination as? UINavigationController,
+    //            let TV = navC.viewControllers.first as? TableViewController {
+    //
+    //        }
+    //    }
     
     
     func startRecording() {
@@ -292,14 +289,13 @@ extension AudioRecorderController: AVAudioRecorderDelegate {
             let recordingURL = recordingURL {
             audioPlayer = try? AVAudioPlayer(contentsOf: recordingURL)
         }
-        
-            if let recordingURL = self.recordingURL {
-                self.delegate?.didfinishRecord(url: recordingURL)
-                self.navigationController?.popViewController(animated: true)
-            }
-        
+        if let recordingURL = self.recordingURL {
+            self.delegate?.didfinishRecord(url: recordingURL)
+            self.navigationController?.popViewController(animated: true)
+        }
         updateViews()
     }
+    
     func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
         if let error = error {
             print("Audio Record Error: \(error)")

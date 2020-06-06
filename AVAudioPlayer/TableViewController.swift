@@ -26,14 +26,14 @@ class TableViewController: UITableViewController {
     func updateViews() {
         tableView.reloadData()
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return audioToList.count
@@ -45,19 +45,21 @@ class TableViewController: UITableViewController {
         cell.textLabel?.text = audioToList[indexPath.row].description
         return cell
     }
-
+    
     
     // MARK: - Navigation
-
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Add" {
-             guard let recordDetailV = segue.destination as? AudioRecorderController else { return }
-                recordDetailV.delegate = self
-        } else if segue.identifier == "show" {
+            guard let recordDetailV = segue.destination as? AudioRecorderController else { return }
+            recordDetailV.delegate = self
+            recordDetailV.recordingURL = nil
+        } else if segue.identifier == "Show" {
             guard let recordDetailV = segue.destination as? AudioRecorderController,
-            let path = self.tableView.indexPathForSelectedRow else { return }
+                let path = self.tableView.indexPathForSelectedRow else { return }
             recordDetailV.recordingURL = audioToList[path.row]
+            recordDetailV.navigationItem.rightBarButtonItem = nil
         }
     }
 }
