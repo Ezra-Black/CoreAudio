@@ -16,7 +16,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" textLabel="SNP-d9-bDd" style="IBUITableViewCellStyleDefault" id="Rqi-mE-UoO">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" textLabel="SNP-d9-bDd" style="IBUITableViewCellStyleDefault" id="Rqi-mE-UoO">
                                 <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Rqi-mE-UoO" id="2RZ-HP-qNk">
@@ -33,7 +33,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="BYZ-38-t0r" kind="show" id="xbc-nq-W55"/>
+                                    <segue destination="BYZ-38-t0r" kind="show" identifier="Show" id="xbc-nq-W55"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -45,7 +45,7 @@
                     <navigationItem key="navigationItem" id="8t3-pQ-fg8">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="BSt-ZN-wNQ">
                             <connections>
-                                <segue destination="BYZ-38-t0r" kind="show" identifier="AddAudioClipSegue" id="5vf-hI-GOq"/>
+                                <segue destination="BYZ-38-t0r" kind="show" identifier="Add" id="5vf-hI-GOq"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -176,7 +176,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="5vf-hI-GOq"/>
+        <segue reference="xbc-nq-W55"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="mic.fill" catalog="system" width="108" height="128"/>

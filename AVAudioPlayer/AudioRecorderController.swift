@@ -150,7 +150,14 @@ class AudioRecorderController: UIViewController {
     // MARK: - Recording
     
     var audioRecorder: AVAudioRecorder?
-    var recordingURL: URL?
+    var recordingURL: URL? //{
+//        didSet {
+//            if let recordingURL = recordingURL {
+//                audioToList.append(recordingURL)
+//                print("⚠️ Contents of audioToList On TableView is now: \(audioToList.debugDescription)")
+//            }
+//        }
+//    }
     
     var isRecording: Bool {
         audioRecorder?.isRecording ?? false
@@ -276,6 +283,12 @@ extension AudioRecorderController: AVAudioRecorderDelegate {
         if flag,
             let recordingURL = recordingURL {
             audioPlayer = try? AVAudioPlayer(contentsOf: recordingURL)
+        }
+        self.dismiss(animated: true) {
+            if let recordingURL = self.recordingURL {
+                audioToList.append(recordingURL)
+                print("⚠️ Contents of audioToList On TableView is now: \(audioToList.debugDescription)")
+            }
         }
         updateViews()
     }
