@@ -11,6 +11,8 @@ import AVFoundation
 
 class AudioRecorderController: UIViewController {
     
+    var delegate: RecordingDelegate?
+    
     @IBOutlet var playButton: UIButton!
     @IBOutlet var recordButton: UIButton!
     @IBOutlet var timeElapsedLabel: UILabel!
@@ -51,19 +53,23 @@ class AudioRecorderController: UIViewController {
     }
     
     private func updateViews() {
-        playButton.isSelected = isPlaying
-        
+        if self.recordingURL != nil {
+            recordButton.isHidden = true
+            navigationItem.rightBarButtonItem = nil
+            playButton.isSelected = isPlaying
+        } else {
+            playButton.isSelected = isPlaying
+        }
         let currentTime = audioPlayer?.currentTime ?? 0.0
-        let duration = audioPlayer?.duration ?? 0
-        let timeRemaining = round(duration) - currentTime
-        
-        timeElapsedLabel.text = timeIntervalFormatter.string(from: currentTime) ?? "00:00"
-        timeRemainingLabel.text = "-" + (timeIntervalFormatter.string(from: timeRemaining) ?? "00:00")
-        
-        timeSlider.minimumValue = 0
-        timeSlider.maximumValue = Float(duration)
-        timeSlider.value = Float(currentTime)
-        recordButton.isSelected = isRecording
+                   let duration = audioPlayer?.duration ?? 0
+                   let timeRemaining = round(duration) - currentTime
+                   timeElapsedLabel.text = timeIntervalFormatter.string(from: currentTime) ?? "00:00"
+                   timeRemainingLabel.text = "-" + (timeIntervalFormatter.string(from: timeRemaining) ?? "00:00")
+                   
+                   timeSlider.minimumValue = 0
+                   timeSlider.maximumValue = Float(duration)
+                   timeSlider.value = Float(currentTime)
+                   recordButton.isSelected = isRecording
     }
     
     
@@ -102,6 +108,9 @@ class AudioRecorderController: UIViewController {
     }
     
     
+    @IBAction func saveTapped(_ sender: Any) {
+      stopRecording()
+    }
     
     // MARK: - Playback
     
@@ -120,9 +129,10 @@ class AudioRecorderController: UIViewController {
     func loadAudio() {
         //Bundle is READONLY
         //Documents directory is read write
-        let songURL = Bundle.main.url(forResource: "piano", withExtension: "mp3")!
-        
-        audioPlayer = try? AVAudioPlayer(contentsOf: songURL)
+        let songURL = recordingURL
+        if let songURL = songURL {
+            audioPlayer = try? AVAudioPlayer(contentsOf: songURL)
+        }
         
     }
     
@@ -166,12 +176,10 @@ class AudioRecorderController: UIViewController {
     
     func createNewRecordingURL() -> URL {
         let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        
         let name = ISO8601DateFormatter.string(from: Date(), timeZone: .current, formatOptions: .withInternetDateTime)
         let file = documents.appendingPathComponent(name, isDirectory: false).appendingPathExtension("caf")
         //CAF Stands for CoreAudioFile
         print("recording URL: \(file)")
-        
         return file
     }
     
@@ -284,12 +292,12 @@ extension AudioRecorderController: AVAudioRecorderDelegate {
             let recordingURL = recordingURL {
             audioPlayer = try? AVAudioPlayer(contentsOf: recordingURL)
         }
-        self.dismiss(animated: true) {
+        
             if let recordingURL = self.recordingURL {
-                audioToList.append(recordingURL)
-                print("⚠️ Contents of audioToList On TableView is now: \(audioToList.debugDescription)")
+                self.delegate?.didfinishRecord(url: recordingURL)
+                self.navigationController?.popViewController(animated: true)
             }
-        }
+        
         updateViews()
     }
     func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {

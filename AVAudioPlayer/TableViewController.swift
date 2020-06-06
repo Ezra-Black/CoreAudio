@@ -6,12 +6,17 @@
 //  Copyright © 2020 Casanova Studios. All rights reserved.
 //
 
+protocol RecordingDelegate {
+    func didfinishRecord(url: URL)
+}
+
 import UIKit
 let songURL = Bundle.main.url(forResource: "piano", withExtension: "mp3")!
-var audioToList: [URL] = [songURL]
+
 
 class TableViewController: UITableViewController {
     
+    var audioToList: [URL] = [songURL]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,13 +52,19 @@ class TableViewController: UITableViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Add" {
-            
+             guard let recordDetailV = segue.destination as? AudioRecorderController else { return }
+                recordDetailV.delegate = self
         } else if segue.identifier == "show" {
             guard let recordDetailV = segue.destination as? AudioRecorderController,
             let path = self.tableView.indexPathForSelectedRow else { return }
-            recordDetailV.recordingURL = audioToList[path.row].baseURL
+            recordDetailV.recordingURL = audioToList[path.row]
         }
     }
-    
+}
 
+extension TableViewController: RecordingDelegate {
+    func didfinishRecord(url: URL) {
+        audioToList.append(url)
+        tableView.reloadData()
+    }
 }

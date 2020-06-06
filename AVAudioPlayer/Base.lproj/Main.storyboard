@@ -10,7 +10,7 @@
         <!--Table View Controller-->
         <scene sceneID="EUu-ac-1v5">
             <objects>
-                <tableViewController id="axa-R3-bWU" sceneMemberID="viewController">
+                <tableViewController id="axa-R3-bWU" customClass="TableViewController" customModule="AVAudioPlayer" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="m08-zx-UPm">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -141,7 +141,11 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="BqS-1R-UPE">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="inn-1Z-dtn"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="inn-1Z-dtn">
+                            <connections>
+                                <action selector="saveTapped:" destination="BYZ-38-t0r" id="j3F-dz-Cm0"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="audioVisualizer" destination="uJ3-m3-5as" id="u8o-Jm-bKb"/>
@@ -176,7 +180,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="xbc-nq-W55"/>
+        <segue reference="5vf-hI-GOq"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="mic.fill" catalog="system" width="108" height="128"/>
